@@ -1,0 +1,7 @@
+resources:
+- manifest.yaml
+configMapGenerator:
+- name: hello
+  files:
+  - hello.mjs=hello.js
+  - goodbye.mjs

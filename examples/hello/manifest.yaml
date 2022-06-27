@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello
+  template:
+    metadata:
+      labels:
+        app: hello
+    spec:
+      containers:
+      - name: controller
+        image: kyjah/nodejs-server
+        imagePullPolicy: Always
+        env:
+        - name: SERVER_LISTEN_PORT
+          value: "8080"
+        volumeMounts:
+        - name: hooks
+          mountPath: /node/hooks
+      volumes:
+      - name: hooks
+        configMap:
+          name: hello
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello
+spec:
+  selector:
+    app: hello
+  ports:
+  - port: 80
+    targetPort: 8080
